@@ -52,17 +52,30 @@ namespace words {
     size_t k
   ) noexcept {
 
+    // std::vector<words::word_frequency> tempdist;
+    // std::vector<words::word_frequency> topk;
+    // tempdist = dist;
+
+    // std::sort(tempdist.rbegin(), tempdist.rend(),         
+    // [&](const words::word_frequency& word1, const words::word_frequency& word2)
+    // { return (word1.count() < word2.count());} );     // sort the vector of word_frequency by count 
+    //                                                   // and reverse the iterators to get descending order
+
+    // for (int i = 0; i < k; i++){    
+    //   topk.push_back(tempdist.at(i));                 // get top k elements 
+    // }
+
     std::vector<words::word_frequency> tempdist;
     std::vector<words::word_frequency> topk;
     tempdist = dist;
+    std::vector<words::word_frequency>::iterator max_ele;
 
-    std::sort(tempdist.rbegin(), tempdist.rend(),         
-    [&](const words::word_frequency& word1, const words::word_frequency& word2)
-    { return (word1.count() < word2.count());} );     // sort the vector of word_frequency by count 
-                                                      // and reverse the iterators to get descending order
-
-    for (int i = 0; i < k; i++){    
-      topk.push_back(tempdist.at(i));                 // get top k elements 
+    for (int i = 0; i < k; i++){
+      max_ele = std::max_element(tempdist.begin(), tempdist.end(),
+        [&](const words::word_frequency& word1, const words::word_frequency& word2) {
+          return (word1.count() < word2.count());} );
+      topk.push_back(*max_ele);
+      tempdist.erase(max_ele);    
     }
 
     return topk;
